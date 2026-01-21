@@ -63,7 +63,7 @@ export class CircleContextMenu {
             if (this.titlePop) {
                 this.titlePop.textContent = item.key;
                 this.titlePop.classList.add('visible');
-                // Hide center icon when title is visible
+                // Hide center icon when title is visible to prevent overlap
                 if (this.centerButton) {
                     this.centerButton.querySelector('span').style.opacity = '0';
                 }
@@ -109,6 +109,10 @@ export class CircleContextMenu {
         const glass = document.createElement('div');
         glass.className = 'segment-glass';
         segment.appendChild(glass);
+        
+        const shine = document.createElement('div');
+        shine.className = 'segment-shine';
+        segment.appendChild(shine);
         
         const label = document.createElement('span');
         label.className = 'segment-label';

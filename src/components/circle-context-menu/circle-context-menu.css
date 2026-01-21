@@ -1,0 +1,141 @@
+/* Circle Menu Styles */
+.circle-menu {
+    position: fixed;
+    border-radius: 50%;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    background: transparent;
+    overflow: hidden;
+    contain: paint;
+    /* Double border effect: thin light edge + soft outer glow + deep shadow */
+    box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.1), 
+        0 0 20px rgba(0, 0, 0, 0.4),
+        0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.circle-menu.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.menu-segment {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    transform: translateZ(0);
+    will-change: clip-path;
+    isolation: isolate;
+}
+
+.segment-glass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25, 25, 25, 0.95);
+    transition: all 0.2s ease;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+.menu-segment:hover .segment-glass {
+    background: rgba(45, 45, 45, 0.95); /* Subtle highlight */
+    z-index: 2;
+}
+
+.segment-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+    z-index: 2;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+.menu-segment:hover .segment-label {
+    transform: translate(-50%, -50%);
+}
+
+.center-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    background: rgba(25, 25, 25, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Multi-layered shadow for depth */
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.5),
+        0 4px 15px rgba(0, 0, 0, 0.8), 
+        inset 0 0 10px rgba(255, 255, 255, 0.05);
+    pointer-events: auto;
+}
+
+.center-button:hover {
+    background: rgba(30, 30, 30, 1);
+    transform: translate(-50%, -50%) scale(1.05);
+    border-color: var(--accent-color);
+    box-shadow: 
+        0 0 0 1px var(--accent-color),
+        0 0 20px rgba(59, 130, 246, 0.4),
+        inset 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+/* Title Pop Styles */
+.menu-title-pop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 80px; /* Fixed width for ellipsis */
+    text-align: center;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    
+    /* Ellipsis support */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-title-pop.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.center-button span {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    line-height: 1;
+    transition: opacity 0.2s ease; /* Added for title pop overlap */
+}

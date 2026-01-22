@@ -15,8 +15,8 @@ export class App {
         this.mainMenu.onInit = (menu) => console.log("Menu initialized", menu);
         this.mainMenu.onOpen = (menu) => console.log("Menu opened", menu);
         this.mainMenu.onClose = (menu) => console.log("Menu closed", menu);
-        this.mainMenu.onSelectItem = (item) => console.log("Item selected:", item.key);
-        this.mainMenu.onHover = (item) => console.log("Hovering over:", item.key);        
+        this.mainMenu.onSelectItem = (item) => console.log("Item selected:", item.name);
+        this.mainMenu.onHover = (item) => console.log("Hovering over:", item.name);        
         this.mainMenu.init();
         console.log("Boot sequence completed. Right-click to see the menu.");
     }

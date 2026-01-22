@@ -1,22 +1,22 @@
 export const mainMenuItems = [
     { 
-        key: 'home', 
-        value: '🏠',
-        items: [
-            { key: 'dashboard', value: '📊' },
-            { key: 'analytics', value: '📈' },
+        name: 'home', 
+        image: '🏠',
+        children: [
+            { name: 'dashboard', image: '📊' },
+            { name: 'analytics', image: '📈' },
             { 
-                key: 'reports', 
-                value: '📝',
-                items: [
-                    { key: 'annual', value: '📅' },
-                    { key: 'monthly', value: '📆' },
+                name: 'reports', 
+                image: '📝',
+                children: [
+                    { name: 'annual', image: '📅' },
+                    { name: 'monthly', image: '📆' },
                     { 
-                        key: 'weekly', 
-                        value: '🗓️',
-                        items: [
-                            { key: 'draft', value: '📋' },
-                            { key: 'final', value: '✅' }
+                        name: 'weekly', 
+                        image: '🗓️',
+                        children: [
+                            { name: 'draft', image: '📋' },
+                            { name: 'final', image: '✅' }
                         ]
                     }
                 ]
@@ -24,24 +24,24 @@ export const mainMenuItems = [
         ]
     },
     { 
-        key: 'edit', 
-        value: '✏️',
-        items: [
-            { key: 'copy', value: '📋' },
-            { key: 'paste', value: '📥' },
-            { key: 'cut', value: '✂️' }
+        name: 'edit', 
+        image: '✏️',
+        children: [
+            { name: 'copy', image: '📋' },
+            { name: 'paste', image: '📥' },
+            { name: 'cut', image: '✂️' }
         ]
     },
-    { key: 'delete', value: '🗑️' },
+    { name: 'delete', image: '🗑️' },
     { 
-        key: 'share', 
-        value: '🔗',
-        items: [
-            { key: 'email', value: '📧' },
-            { key: 'twitter', value: '🐦' },
-            { key: 'facebook', value: '👥' }
+        name: 'share', 
+        image: '🔗',
+        children: [
+            { name: 'email', image: '📧' },
+            { name: 'twitter', image: '🐦' },
+            { name: 'facebook', image: '👥' }
         ]
     },
-    { key: 'settings', value: '⚙️' },
-    { key: 'profile', value: '👤' },
+    { name: 'settings', image: '⚙️' },
+    { name: 'profile', image: '👤' },
 ];

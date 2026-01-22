@@ -27,7 +27,7 @@ export class RadialContextMenu {
 
     get currentItems() {
         if (this.navigationStack.length === 0) return this.itemsSource;
-        return this.navigationStack[this.navigationStack.length - 1].items || [];
+        return this.navigationStack[this.navigationStack.length - 1].children || [];
     }
 
     createMenu() {
@@ -116,7 +116,7 @@ export class RadialContextMenu {
     }
 
     navigateTo(item) {
-        if (item.items && item.items.length > 0) {
+        if (item.children && item.children.length > 0) {
             this.navigationStack.push(item);
             this.renderSegments('in');
             this.updateCenterButton();
@@ -129,7 +129,7 @@ export class RadialContextMenu {
         
         const segment = document.createElement('div');
         segment.className = 'menu-segment';
-        if (item.items && item.items.length > 0) {
+        if (item.children && item.children.length > 0) {
             segment.classList.add('has-children');
         }
         segment.style.zIndex = index + 1;
@@ -167,7 +167,7 @@ export class RadialContextMenu {
         
         const label = document.createElement('span');
         label.className = 'segment-label';
-        label.textContent = item.value;
+        label.textContent = item.image;
         
         const midAngle = startAngle + (angleWidth / 2);
         const labelPos = this.getPoint(midAngle, 39);
@@ -176,7 +176,7 @@ export class RadialContextMenu {
         
         segment.appendChild(label);
 
-        if (item.items && item.items.length > 0) {
+        if (item.children && item.children.length > 0) {
             const indicator = document.createElement('div');
             indicator.className = 'submenu-indicator';
             const indicatorPos = this.getPoint(midAngle, 47.5);
@@ -222,7 +222,7 @@ export class RadialContextMenu {
                 if (segment && segment._menuItem) {
                     e.stopPropagation();
                     const item = segment._menuItem;
-                    if (item.items && item.items.length > 0) {
+                    if (item.children && item.children.length > 0) {
                         this.navigateTo(item);
                     } else {
                         if (this.onSelectItem) {
@@ -242,7 +242,7 @@ export class RadialContextMenu {
                     }
 
                     if (this.titlePop) {
-                        this.titlePop.textContent = item.key;
+                        this.titlePop.textContent = item.name;
                         this.titlePop.classList.add('visible');
                         if (this.centerButton) {
                             this.centerButton.querySelector('span').style.opacity = '0';

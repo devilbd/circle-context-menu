@@ -1,3 +1,5 @@
+@import "./circle-context-menu/circle-context-menu.css";
+
 :root {
   --bg-color: #0a0a0a;
   --text-color: #f0f0f0;
@@ -49,4 +51,12 @@ p {
 .content {
     text-align: center;
     z-index: 1;
+}
+.content:hover {
+  cursor: pointer;
+  border: 1px solid var(--accent-color);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px var(--accent-color);
+  transition: all 0.3s ease;
 }

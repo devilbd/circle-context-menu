@@ -7,6 +7,7 @@ export class CircleContextMenu {
         this.onClose = null;
         this.onOpen = null;
         this.onInit = null;
+        this.selector = null; // Optional: restrict context menu to specific elements
         
         this.menu = null;
         this.isOpen = false;
@@ -198,6 +199,11 @@ export class CircleContextMenu {
     attachEvents() {
         this._handlers = {
             contextmenu: (e) => {
+                if (this.selector) {
+                    const target = e.target.closest(this.selector);
+                    if (!target) return;
+                }
+                
                 e.preventDefault();
                 if (this.isOpen) {
                     this.close();

@@ -1,21 +1,31 @@
 export class CircleContextMenu {
-    constructor(options = {}) {
-        this.rootItems = options.itemsSource || [];
+    constructor() {
+        // Properties to be set before init()
+        this.itemsSource = [];
+        this.onHover = null;
+        this.onSelectItem = null;
+        this.onClose = null;
+        this.onOpen = null;
+        this.onInit = null;
+        
         this.menu = null;
         this.isOpen = false;
         this.radius = 150; // pixels
         this.navigationStack = []; // Breadcrumbs for nested menus
-        this.init();
     }
 
     init() {
         this.createMenu();
         this.createCenterButton();
         this.attachEvents();
+        
+        if (this.onInit) {
+            this.onInit(this);
+        }
     }
 
     get currentItems() {
-        if (this.navigationStack.length === 0) return this.rootItems;
+        if (this.navigationStack.length === 0) return this.itemsSource;
         return this.navigationStack[this.navigationStack.length - 1].items || [];
     }
 
@@ -32,10 +42,7 @@ export class CircleContextMenu {
         this.menu.appendChild(this.titlePop);
         
         // Items container to allow swapping segments
-        this.itemsContainer = document.createElement('div');
-        this.itemsContainer.className = 'items-container';
-        this.menu.appendChild(this.itemsContainer);
-
+        this.itemsContainer = null;
         this.renderSegments();
 
         document.body.appendChild(this.menu);
@@ -125,55 +132,30 @@ export class CircleContextMenu {
             segment.classList.add('has-children');
         }
         segment.style.zIndex = index + 1;
-
-        // Hover events for title pop
-        segment.onmouseenter = () => {
-            if (this.titlePop) {
-                this.titlePop.textContent = item.key;
-                this.titlePop.classList.add('visible');
-                // Hide center icon when title is visible to prevent overlap
-                if (this.centerButton) {
-                    this.centerButton.querySelector('span').style.opacity = '0';
-                }
-            }
-        };
-
-        segment.onmouseleave = () => {
-            if (this.titlePop) {
-                this.titlePop.classList.remove('visible');
-                // Show center icon again
-                if (this.centerButton) {
-                    this.centerButton.querySelector('span').style.opacity = '1';
-                }
-            }
-        };
         
-        const innerDist = 26; // Increased segment depth by reducing inner radius
-        const outerDist = 49.5; // Outer radius (%)
+        // Store item data association securely
+        segment._menuItem = item;
+
+        const innerDist = 26;
+        const outerDist = 49.5;
         
-        // High-fidelity polygon: generate 1 point per 0.5 degrees
         const points = [];
         const step = 0.5;
         
-        // Outer arc (Clockwise)
         for (let a = startAngle; a <= endAngle; a += step) {
             points.push(this.getPoint(a, outerDist));
         }
         points.push(this.getPoint(endAngle, outerDist));
         
-        // Inner arc (Counter-Clockwise)
         for (let a = endAngle; a >= startAngle; a -= step) {
             points.push(this.getPoint(a, innerDist));
         }
         points.push(this.getPoint(startAngle, innerDist));
 
         const clipPathStr = `polygon(${points.map(p => `${p.x.toFixed(6)}% ${p.y.toFixed(6)}%`).join(', ')})`;
-        
-        // Apply clipping to the segment container
         segment.style.clipPath = clipPathStr;
         segment.style.webkitClipPath = clipPathStr;
 
-        // Inner glass element to handle background and filters separately
         const glass = document.createElement('div');
         glass.className = 'segment-glass';
         segment.appendChild(glass);
@@ -186,7 +168,6 @@ export class CircleContextMenu {
         label.className = 'segment-label';
         label.textContent = item.value;
         
-        // Position label in the middle of the segment arc
         const midAngle = startAngle + (angleWidth / 2);
         const labelPos = this.getPoint(midAngle, 39);
         label.style.left = `${labelPos.x}%`;
@@ -194,7 +175,6 @@ export class CircleContextMenu {
         
         segment.appendChild(label);
 
-        // Sub-item indicator
         if (item.items && item.items.length > 0) {
             const indicator = document.createElement('div');
             indicator.className = 'submenu-indicator';
@@ -204,16 +184,6 @@ export class CircleContextMenu {
             segment.appendChild(indicator);
         }
         
-        segment.onclick = (e) => {
-            e.stopPropagation();
-            if (item.items && item.items.length > 0) {
-                this.navigateTo(item);
-            } else {
-                console.log(`Clicked: ${item.key}`);
-                this.close();
-            }
-        };
-
         return segment;
     }
 
@@ -235,19 +205,72 @@ export class CircleContextMenu {
                     this.open(e.clientX, e.clientY);
                 }
             },
-            click: () => {
-                if (this.isOpen) this.close();
+            click: (e) => {
+                // Handle outside clicks to close
+                if (!this.menu.contains(e.target) && this.isOpen) {
+                    this.close();
+                }
+
+                // Handle segment clicks via delegation
+                const segment = e.target.closest('.menu-segment');
+                if (segment && segment._menuItem) {
+                    e.stopPropagation();
+                    const item = segment._menuItem;
+                    if (item.items && item.items.length > 0) {
+                        this.navigateTo(item);
+                    } else {
+                        if (this.onSelectItem) {
+                            this.onSelectItem(item);
+                        }
+                        this.close();
+                    }
+                }
+            },
+            mouseover: (e) => {
+                const segment = e.target.closest('.menu-segment');
+                if (segment && segment._menuItem) {
+                    const item = segment._menuItem;
+                    
+                    if (this.onHover) {
+                        this.onHover(item);
+                    }
+
+                    if (this.titlePop) {
+                        this.titlePop.textContent = item.key;
+                        this.titlePop.classList.add('visible');
+                        if (this.centerButton) {
+                            this.centerButton.querySelector('span').style.opacity = '0';
+                        }
+                    }
+                }
+            },
+            mouseout: (e) => {
+                const segment = e.target.closest('.menu-segment');
+                if (segment) {
+                    if (this.titlePop) {
+                        this.titlePop.classList.remove('visible');
+                        if (this.centerButton) {
+                            this.centerButton.querySelector('span').style.opacity = '1';
+                        }
+                    }
+                }
             }
         };
 
         document.addEventListener('contextmenu', this._handlers.contextmenu);
         document.addEventListener('click', this._handlers.click);
+        this.menu.addEventListener('mouseover', this._handlers.mouseover);
+        this.menu.addEventListener('mouseout', this._handlers.mouseout);
     }
 
     destroy() {
         if (this._handlers) {
             document.removeEventListener('contextmenu', this._handlers.contextmenu);
             document.removeEventListener('click', this._handlers.click);
+            if (this.menu) {
+                this.menu.removeEventListener('mouseover', this._handlers.mouseover);
+                this.menu.removeEventListener('mouseout', this._handlers.mouseout);
+            }
             this._handlers = null;
         }
 
@@ -271,6 +294,10 @@ export class CircleContextMenu {
         this.menu.offsetHeight;
         this.menu.classList.add('active');
         this.isOpen = true;
+
+        if (this.onOpen) {
+            this.onOpen(this);
+        }
     }
 
     close() {
@@ -278,6 +305,9 @@ export class CircleContextMenu {
         setTimeout(() => {
             if (!this.menu.classList.contains('active')) {
                 this.menu.style.display = 'none';
+                if (this.onClose) {
+                    this.onClose(this);
+                }
             }
         }, 300);
         this.isOpen = false;

@@ -54,9 +54,16 @@ export class Boot {
             { key: 'profile', value: '👤' },
         ];
 
-        this.menu = new CircleContextMenu({
-            itemsSource: items
-        });
+        this.menu = new CircleContextMenu();
+        
+        this.menu.itemsSource = items;
+        this.menu.onInit = (menu) => console.log("Menu initialized", menu);
+        this.menu.onOpen = (menu) => console.log("Menu opened", menu);
+        this.menu.onClose = (menu) => console.log("Menu closed", menu);
+        this.menu.onSelectItem = (item) => console.log("Item selected:", item.key);
+        this.menu.onHover = (item) => console.log("Hovering over:", item.key);
+        
+        this.menu.init();
 
         console.log("Boot sequence completed. Right-click to see the menu.");
     }

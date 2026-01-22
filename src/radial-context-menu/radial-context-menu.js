@@ -1,4 +1,4 @@
-export class CircleContextMenu {
+export class RadialContextMenu {
     constructor() {
         // Properties to be set before init()
         this.itemsSource = [];
@@ -32,7 +32,7 @@ export class CircleContextMenu {
 
     createMenu() {
         this.menu = document.createElement('div');
-        this.menu.className = 'circle-menu';
+        this.menu.className = 'radial-menu';
         this.menu.style.width = `${this.radius * 2}px`;
         this.menu.style.height = `${this.radius * 2}px`;
         this.menu.style.display = 'none';

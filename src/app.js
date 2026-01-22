@@ -1,4 +1,4 @@
-import { CircleContextMenu } from "./circle-context-menu/circle-context-menu.js";
+import { RadialContextMenu } from "./radial-context-menu/radial-context-menu.js";
 import { mainMenuItems } from "./main-menu-data.js";
 
 export class App {
@@ -9,7 +9,7 @@ export class App {
     }
 
     setupContextMenu() {
-        this.mainMenu = new CircleContextMenu();        
+        this.mainMenu = new RadialContextMenu();        
         this.mainMenu.itemsSource = mainMenuItems;
         this.mainMenu.selector = '.content';
         this.mainMenu.onInit = (menu) => console.log("Menu initialized", menu);

@@ -27,7 +27,9 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  gap: 2rem;
   align-items: center;
   min-height: 100vh;
   overflow: hidden;
@@ -49,11 +51,12 @@ p {
   font-size: 1.1rem;
 }
 
-.content {
+.content,.content-svg {
     text-align: center;
     z-index: 1;
 }
-.content:hover {
+
+.content:hover,.content-svg:hover {
   cursor: pointer;
   border: 1px solid var(--accent-color);
   border-radius: 10px;

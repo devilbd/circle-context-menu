@@ -198,7 +198,7 @@ export class CircleContextMenu {
         if (item.items && item.items.length > 0) {
             const indicator = document.createElement('div');
             indicator.className = 'submenu-indicator';
-            const indicatorPos = this.getPoint(midAngle, 45);
+            const indicatorPos = this.getPoint(midAngle, 47.5);
             indicator.style.left = `${indicatorPos.x}%`;
             indicator.style.top = `${indicatorPos.y}%`;
             segment.appendChild(indicator);

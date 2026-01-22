@@ -202,8 +202,8 @@
 
 .submenu-indicator {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
     background: white;
     border-radius: 50%;
     transform: translate(-50%, -50%);

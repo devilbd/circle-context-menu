@@ -152,14 +152,37 @@ export class CircleContextMenu {
     }
 
     attachEvents() {
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            this.open(e.clientX, e.clientY);
-        });
+        this._handlers = {
+            contextmenu: (e) => {
+                e.preventDefault();
+                if (this.isOpen) {
+                    this.close();
+                } else {
+                    this.open(e.clientX, e.clientY);
+                }
+            },
+            click: () => {
+                if (this.isOpen) this.close();
+            }
+        };
 
-        document.addEventListener('click', () => {
-            if (this.isOpen) this.close();
-        });
+        document.addEventListener('contextmenu', this._handlers.contextmenu);
+        document.addEventListener('click', this._handlers.click);
+    }
+
+    destroy() {
+        if (this._handlers) {
+            document.removeEventListener('contextmenu', this._handlers.contextmenu);
+            document.removeEventListener('click', this._handlers.click);
+            this._handlers = null;
+        }
+
+        if (this.menu && this.menu.parentNode) {
+            this.menu.parentNode.removeChild(this.menu);
+        }
+        
+        this.menu = null;
+        this.isOpen = false;
     }
 
     open(x, y) {

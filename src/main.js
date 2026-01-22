@@ -13,18 +13,6 @@ export class Boot {
             { key: 'share', value: '🔗' },
             { key: 'settings', value: '⚙️' },
             { key: 'profile', value: '👤' },
-            { key: 'home', value: '🏠' },
-            { key: 'edit', value: '✏️' },
-            { key: 'delete', value: '🗑️' },
-            { key: 'share', value: '🔗' },
-            { key: 'settings', value: '⚙️' },
-            { key: 'profile', value: '👤' },
-            { key: 'home', value: '🏠' },
-            { key: 'edit', value: '✏️' },
-            { key: 'delete', value: '🗑️' },
-            { key: 'share', value: '🔗' },
-            { key: 'settings', value: '⚙️' },
-            { key: 'profile', value: '👤' },
         ];
 
         this.menu = new CircleContextMenu({

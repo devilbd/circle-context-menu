@@ -1,19 +1,16 @@
 export class RadialContextMenu {
-    constructor() {
-        // Properties to be set before init()
-        this.itemsSource = [];
-        this.onHover = null;
-        this.onSelectItem = null;
-        this.onClose = null;
-        this.onOpen = null;
-        this.onInit = null;
-        this.selector = null; // Optional: restrict context menu to specific elements
-        
-        this.menu = null;
-        this.isOpen = false;
-        this.radius = 150; // pixels
-        this.navigationStack = []; // Breadcrumbs for nested menus
-    }
+    // Properties to be set before init()
+    itemsSource = [];
+    onHover;
+    onSelectItem;
+    onClose;
+    onOpen;
+    onInit;
+    selector; // Optional: restrict context menu to specific elements
+    menu;
+    isOpen = false;
+    radius = 150; // pixels
+    navigationStack = []; // Breadcrumbs for nested menus
 
     init() {
         this.createMenu();
